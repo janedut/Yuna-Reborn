@@ -30,6 +30,11 @@
     if (![self yunaView]) self.yunaView = [UIView new];
     [[self view] insertSubview:[self yunaView] atIndex:1];
 
+    // give yunaView a subtle background and rounded corners
+    [[self yunaView] setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.35]];
+    // [[[self yunaView] layer] setCornerRadius:50];
+    [[self yunaView] setClipsToBounds:YES];
+
     [[self yunaView] setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[NSLayoutConstraint activateConstraints:@[
 		[self.yunaView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
@@ -326,7 +331,7 @@
             if (!showIconsSwitch) {
                 [NSLayoutConstraint activateConstraints:@[
                     [self.notesHeaderLabel.topAnchor constraintEqualToAnchor:self.yunaView.topAnchor constant:[upcomingNotesYAxisValue doubleValue]],
-                    [self.notesHeaderLabel.leadingAnchor constraintEqualToAnchor:self.upcomingHeaderLabel.trailingAnchor constant:[upcomingNotesXAxisValue doubleValue]],
+                    [self.notesHeaderLabel.leadingAnchor constraintEqualToAnchor:self.upcomingHeaderLabel.trailingAnchor constant:([upcomingNotesXAxisValue doubleValue] + 50)],
                 ]];
             } else {
                 // [NSLayoutConstraint activateConstraints:@[
@@ -338,7 +343,7 @@
             if (!showIconsSwitch) {
                 [NSLayoutConstraint activateConstraints:@[
                     [self.notesHeaderLabel.topAnchor constraintEqualToAnchor:self.yunaView.topAnchor constant:[upcomingNotesYAxisValue doubleValue]],
-                    [self.notesHeaderLabel.leadingAnchor constraintEqualToAnchor:self.yunaView.leadingAnchor constant:[upcomingNotesXAxisValue doubleValue]],
+                    [self.notesHeaderLabel.leadingAnchor constraintEqualToAnchor:self.yunaView.leadingAnchor constant:([upcomingNotesXAxisValue doubleValue] + 50)],
                 ]];
             } else {
                 // [NSLayoutConstraint activateConstraints:@[
@@ -368,7 +373,7 @@
                 [NSLayoutConstraint activateConstraints:@[
                     [self.notesView.topAnchor constraintEqualToAnchor:self.notesHeaderLabel.bottomAnchor constant:8],
                     [self.notesView.leadingAnchor constraintEqualToAnchor:self.notesHeaderLabel.leadingAnchor],
-                    [self.notesView.widthAnchor constraintEqualToConstant:300],
+                    [self.notesView.widthAnchor constraintEqualToConstant:400],
                     [self.notesView.heightAnchor constraintEqualToConstant:400],
                 ]];
             } else {
@@ -384,7 +389,7 @@
                 [NSLayoutConstraint activateConstraints:@[
                     [self.notesView.topAnchor constraintEqualToAnchor:self.notesHeaderLabel.bottomAnchor constant:8],
                     [self.notesView.leadingAnchor constraintEqualToAnchor:self.notesHeaderLabel.leadingAnchor],
-                    [self.notesView.widthAnchor constraintEqualToConstant:300],
+                    [self.notesView.widthAnchor constraintEqualToConstant:400],
                     [self.notesView.heightAnchor constraintEqualToConstant:400],
                 ]];
             } else {
@@ -610,6 +615,8 @@
         } completion:nil];
     } else {
         // [[self upcomingHeaderIcon] setAlpha:0];
+        [[self yunaView] setAlpha:0]; //yuna view
+
         [[self upcomingHeaderLabel] setAlpha:0];
         [[self eventsTitleLabel] setAlpha:0];
         [[self eventsList] setAlpha:0];
@@ -621,8 +628,10 @@
         [[self notesHeaderLabel] setAlpha:0];
         [[self notesView] setAlpha:0];
 
-        [UIView animateWithDuration:0.3 delay:0.05 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.2 delay:0.05 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             // [[self upcomingHeaderIcon] setAlpha:1];
+            [[self yunaView] setAlpha:1]; //yuna view
+
             [[self upcomingHeaderLabel] setAlpha:1];
             [[self eventsTitleLabel] setAlpha:1];
             [[self eventsList] setAlpha:1];
@@ -771,6 +780,7 @@
     } else {
         [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             // [[self upcomingHeaderIcon] setAlpha:0];
+            [[self yunaView] setAlpha:0]; //yuna view
             [[self upcomingHeaderLabel] setAlpha:0];
             [[self eventsTitleLabel] setAlpha:0];
             [[self eventsList] setAlpha:0];
@@ -781,6 +791,7 @@
             // [[self notesHeaderIcon] setAlpha:0];
             [[self notesHeaderLabel] setAlpha:0];
             [[self notesView] setAlpha:0];
+            
         } completion:nil];
     }
 
@@ -1069,9 +1080,9 @@
     [preferences registerBool:&showEventsSwitch default:YES forKey:@"showEvents"];
     [preferences registerBool:&showRemindersSwitch default:YES forKey:@"showReminders"];
     [preferences registerBool:&showAlarmsSwitch default:YES forKey:@"showAlarms"];
-    [preferences registerObject:&upcomingNotesXAxisValue default:@"100" forKey:@"upcomingNotesXAxis"];
+    [preferences registerObject:&upcomingNotesXAxisValue default:@"50" forKey:@"upcomingNotesXAxis"];
     [preferences registerObject:&upcomingNotesYAxisValue default:@"80" forKey:@"upcomingNotesYAxis"];
-    [preferences registerObject:&upcomingNotesAnimationValue default:@"1" forKey:@"upcomingNotesAnimation"];
+    [preferences registerObject:&upcomingNotesAnimationValue default:@"0" forKey:@"upcomingNotesAnimation"];
     [preferences registerObject:&upcomingHeaderTitleValue default:@"Upcoming" forKey:@"upcomingHeaderTitle"];
     // [preferences registerObject:&upcomingHeaderColorValue default:@"ffffffff" forKey:@"upcomingHeaderColor"];
     [preferences registerObject:&upcomingHeaderAlphaValue default:@"1" forKey:@"upcomingHeaderAlpha"];
@@ -1107,9 +1118,9 @@
 
     // weather
     [preferences registerBool:&showWeatherSwitch default:YES forKey:@"showWeather"];
-    [preferences registerObject:&weatherXAxisValue default:@"100" forKey:@"weatherXAxis"];
+    [preferences registerObject:&weatherXAxisValue default:@"50" forKey:@"weatherXAxis"];
     [preferences registerObject:&weatherYAxisValue default:@"100" forKey:@"weatherYAxis"];
-    [preferences registerObject:&weatherAnimationValue default:@"1" forKey:@"weatherAnimation"];
+    [preferences registerObject:&weatherAnimationValue default:@"0" forKey:@"weatherAnimation"];
     // [preferences registerObject:&weatherIconColorValue default:@"ffffffff" forKey:@"weatherIconColor"];
     [preferences registerObject:&weatherIconAlphaValue default:@"1" forKey:@"weatherIconAlpha"];
     // [preferences registerObject:&weatherTemperatureColorValue default:@"ffffffff" forKey:@"weatherTemperatureColor"];

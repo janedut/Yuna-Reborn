@@ -18,7 +18,7 @@ int availableAlarms = 0;
 
 // upcoming & notes
 BOOL showIconsSwitch = NO;
-NSString* upcomingNotesXAxisValue = @"100";
+NSString* upcomingNotesXAxisValue = @"80";
 NSString* upcomingNotesYAxisValue = @"80";
 NSString* upcomingNotesAnimationValue = @"1";
 BOOL showEventsSwitch = YES;
