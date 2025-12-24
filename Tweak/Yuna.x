@@ -31,7 +31,15 @@
     [[self view] insertSubview:[self yunaView] atIndex:1];
 
     // give yunaView a subtle background and rounded corners
-    [[self yunaView] setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.35]];
+    if (@available(iOS 13.0, *)) {
+        if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            [[self yunaView] setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.2]];
+        } else {
+            [[self yunaView] setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.35]];
+        }
+    } else {
+        [[self yunaView] setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.35]];
+    }
     // [[[self yunaView] layer] setCornerRadius:50];
     [[self yunaView] setClipsToBounds:YES];
 
@@ -331,7 +339,7 @@
             if (!showIconsSwitch) {
                 [NSLayoutConstraint activateConstraints:@[
                     [self.notesHeaderLabel.topAnchor constraintEqualToAnchor:self.yunaView.topAnchor constant:[upcomingNotesYAxisValue doubleValue]],
-                    [self.notesHeaderLabel.leadingAnchor constraintEqualToAnchor:self.upcomingHeaderLabel.trailingAnchor constant:([upcomingNotesXAxisValue doubleValue] + 50)],
+                    [self.notesHeaderLabel.leadingAnchor constraintEqualToAnchor:self.upcomingHeaderLabel.trailingAnchor constant:([upcomingNotesXAxisValue doubleValue] + 0)],
                 ]];
             } else {
                 // [NSLayoutConstraint activateConstraints:@[
@@ -343,7 +351,7 @@
             if (!showIconsSwitch) {
                 [NSLayoutConstraint activateConstraints:@[
                     [self.notesHeaderLabel.topAnchor constraintEqualToAnchor:self.yunaView.topAnchor constant:[upcomingNotesYAxisValue doubleValue]],
-                    [self.notesHeaderLabel.leadingAnchor constraintEqualToAnchor:self.yunaView.leadingAnchor constant:([upcomingNotesXAxisValue doubleValue] + 50)],
+                    [self.notesHeaderLabel.leadingAnchor constraintEqualToAnchor:self.yunaView.leadingAnchor constant:([upcomingNotesXAxisValue doubleValue] + 0)],
                 ]];
             } else {
                 // [NSLayoutConstraint activateConstraints:@[
@@ -373,7 +381,7 @@
                 [NSLayoutConstraint activateConstraints:@[
                     [self.notesView.topAnchor constraintEqualToAnchor:self.notesHeaderLabel.bottomAnchor constant:8],
                     [self.notesView.leadingAnchor constraintEqualToAnchor:self.notesHeaderLabel.leadingAnchor],
-                    [self.notesView.widthAnchor constraintEqualToConstant:400],
+                    [self.notesView.widthAnchor constraintEqualToConstant:300],
                     [self.notesView.heightAnchor constraintEqualToConstant:400],
                 ]];
             } else {
@@ -628,7 +636,7 @@
         [[self notesHeaderLabel] setAlpha:0];
         [[self notesView] setAlpha:0];
 
-        [UIView animateWithDuration:0.2 delay:0.05 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             // [[self upcomingHeaderIcon] setAlpha:1];
             [[self yunaView] setAlpha:1]; //yuna view
 
